@@ -1,0 +1,6 @@
+name: Shared Name
+description: A Docker container action that has the same name as another action.
+
+runs:
+  using: docker
+  image: Dockerfile

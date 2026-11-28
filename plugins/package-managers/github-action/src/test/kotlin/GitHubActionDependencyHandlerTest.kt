@@ -20,6 +20,8 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.githubaction
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAll
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 
@@ -37,8 +39,8 @@ class GitHubActionDependencyHandlerTest : WordSpec({
 
     val projectId = Identifier("GitHubAction:workflow:workflow:")
 
-    fun resolvePackages(vararg actions: ABom.Action) =
-        DependencyGraphBuilder(GitHubActionDependencyHandler(projectVcs)).run {
+    fun resolvePackages(vararg actions: ABom.Action, vcs: VcsInfo = projectVcs) =
+        DependencyGraphBuilder(GitHubActionDependencyHandler(vcs)).run {
             addDependencies(projectId, "job", actions.toList())
             packages()
         }
@@ -91,6 +93,131 @@ class GitHubActionDependencyHandlerTest : WordSpec({
                 ".github/actions/setup-java"
             )
         }
+
+        "create purls with the repository as the name and the path to the action as the subpath" {
+            val packages = resolvePackages(
+                standardAction("actions", "checkout", "v6"),
+                subdirectoryAction("github", "codeql-action", "init", "v4"),
+                localAction("./"),
+                localAction("./.github/actions/free-disk-space")
+            )
+
+            packages.map { it.purl } should containExactlyInAnyOrder(
+                "pkg:github/actions/checkout@v6",
+                "pkg:github/github/codeql-action@v4#init",
+                "pkg:github/oss-review-toolkit/ort@${projectVcs.revision}",
+                "pkg:github/oss-review-toolkit/ort@${projectVcs.revision}#.github/actions/free-disk-space"
+            )
+        }
+
+        "create distinct packages for different Docker images" {
+            val packages = resolvePackages(
+                dockerAction("alpine:3.20"),
+                dockerAction("ghcr.io/owner/image@sha256:0123abcd"),
+                dockerAction("localhost:5000/image:1.0")
+            )
+
+            packages.map { it.id } should containExactlyInAnyOrder(
+                Identifier("Docker", "", "alpine", "3.20"),
+                Identifier("Docker", "ghcr.io/owner", "image", "sha256%3A0123abcd"),
+                Identifier("Docker", "localhost%3A5000", "image", "1.0")
+            )
+
+            packages.map { it.purl } should containExactlyInAnyOrder(
+                "pkg:docker/alpine@3.20",
+                "pkg:docker/owner/image@sha256%3A0123abcd?repository_url=ghcr.io",
+                "pkg:docker/image@1.0?repository_url=localhost%3A5000"
+            )
+        }
+
+        "create purls with encoded versions" {
+            val packages = resolvePackages(standardAction("actions", "checkout", "releases/v6"))
+
+            packages.map { it.purl } should containExactlyInAnyOrder("pkg:github/actions/checkout@releases%2Fv6")
+        }
+
+        "create purls with a lowercase owner and repository" {
+            val packages = resolvePackages(subdirectoryAction("SonarSource", "SonarQube-Scan-Action", "Install", "V5"))
+
+            packages.map { it.purl } should containExactly("pkg:github/sonarsource/sonarqube-scan-action@V5#Install")
+        }
+
+        "normalize the paths to local actions" {
+            val packages = resolvePackages(
+                localAction("./.github/actions/../../shared/"),
+                localAction("./shared"),
+                localAction("./.github/actions/..")
+            )
+
+            packages.map { it.id } should containExactlyInAnyOrder(
+                Identifier("GitHubAction", "oss-review-toolkit", "ort/shared", projectVcs.revision),
+                Identifier("GitHubAction", "oss-review-toolkit", "ort/.github", projectVcs.revision)
+            )
+
+            packages.map { it.purl } should containExactlyInAnyOrder(
+                "pkg:github/oss-review-toolkit/ort@${projectVcs.revision}#shared",
+                "pkg:github/oss-review-toolkit/ort@${projectVcs.revision}#.github"
+            )
+
+            packages.map { it.vcs.path } should containExactlyInAnyOrder("shared", ".github")
+        }
+
+        "create no purl for local actions outside the repository" {
+            val packages = resolvePackages(localAction("../other/action"))
+
+            packages.map { it.purl } should containExactly("")
+        }
+
+        "create packages for local actions if the project has no VCS information" {
+            val packages = resolvePackages(
+                localAction("./"),
+                localAction("./.github/actions/free-disk-space"),
+                vcs = VcsInfo.EMPTY
+            )
+
+            packages.map { it.id } should containExactlyInAnyOrder(
+                Identifier("GitHubAction", "", "", ""),
+                Identifier("GitHubAction", "", ".github/actions/free-disk-space", "")
+            )
+
+            packages.map { it.purl } should containExactlyInAnyOrder("", "")
+        }
+
+        "create packages for local actions if the project is not hosted on GitHub" {
+            val gitLabVcs = projectVcs.copy(url = "https://gitlab.com/oss-review-toolkit/ort.git")
+
+            val packages = resolvePackages(localAction("./.github/actions/free-disk-space"), vcs = gitLabVcs)
+
+            packages.map { it.id } should containExactlyInAnyOrder(
+                Identifier("GitHubAction", "", ".github/actions/free-disk-space", projectVcs.revision)
+            )
+
+            packages.map { it.purl } should containExactlyInAnyOrder("")
+        }
+
+        "not treat projects as hosted on GitHub if only part of the URL matches" {
+            listOf(
+                "https://notgithub.com/oss-review-toolkit/ort.git",
+                "https://gitlab.example/mirrors/github.com/oss-review-toolkit/ort.git"
+            ).forAll { url ->
+                val packages = resolvePackages(localAction("./"), vcs = projectVcs.copy(url = url))
+
+                packages.map { it.id.namespace to it.purl } should containExactly("" to "")
+            }
+        }
+
+        "get the repository of local actions from SCP-like and SSH URLs" {
+            listOf(
+                "git@github.com:oss-review-toolkit/ort.git",
+                "ssh://git@github.com/oss-review-toolkit/ort.git"
+            ).forAll { url ->
+                val packages = resolvePackages(localAction("./"), vcs = projectVcs.copy(url = url))
+
+                packages.map { it.id } should containExactly(
+                    Identifier("GitHubAction", "oss-review-toolkit", "ort", projectVcs.revision)
+                )
+            }
+        }
     }
 })
 
@@ -114,6 +241,14 @@ private fun subdirectoryAction(owner: String, repo: String, path: String, ref: S
         ref = ref,
         refType = ABom.RefType.TAG,
         type = ABom.ActionType.SUBDIRECTORY,
+        pinned = false
+    )
+
+private fun dockerAction(image: String) =
+    ABom.Action(
+        uses = "docker://$image",
+        path = image,
+        type = ABom.ActionType.DOCKER,
         pinned = false
     )
 

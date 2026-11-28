@@ -1,0 +1,9 @@
+name: "Composite: No Dependencies"
+description: A composite action without any dependencies on other actions.
+
+runs:
+  using: composite
+  steps:
+    - name: Print Message
+      shell: bash
+      run: echo "Hello from the composite action."

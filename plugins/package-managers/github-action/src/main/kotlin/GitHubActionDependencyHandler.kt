@@ -19,6 +19,12 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.githubaction
 
+import com.github.packageurl.PackageURL
+import com.github.packageurl.PackageURLBuilder
+
+import java.io.File
+
+import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
@@ -28,6 +34,7 @@ import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.DependencyHandler
+import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.ensurePrefix
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
@@ -39,9 +46,14 @@ internal class GitHubActionDependencyHandler(private val projectVcs: VcsInfo) : 
     override fun linkageFor(dependency: ABom.Action) = PackageLinkage.DYNAMIC
 
     override fun createPackage(dependency: ABom.Action, issues: MutableCollection<Issue>) =
-        with(dependency) {
-            val normalizedPath = path?.removePrefix("./").orEmpty()
+        if (dependency.type == ABom.ActionType.DOCKER) {
+            createDockerPackage(dependency.dockerImage)
+        } else {
+            createActionPackage(dependency)
+        }
 
+    private fun createActionPackage(action: ABom.Action) =
+        with(action) {
             val vcsInfo = if (type == ABom.ActionType.LOCAL) {
                 projectVcs.copy(path = normalizedPath)
             } else {
@@ -55,11 +67,20 @@ internal class GitHubActionDependencyHandler(private val projectVcs: VcsInfo) : 
                 )
             }
 
-            val pathQualifier = if (vcsInfo.path.isNotEmpty()) "#${vcsInfo.path}" else vcsInfo.path
+            val purl = when {
+                // Without a repository on GitHub, there is no "github" purl for local actions.
+                type == ABom.ActionType.LOCAL -> projectRepository?.let { (owner, repo) ->
+                    createGitHubPurl(owner, repo, projectVcs.revision, vcsInfo.path)
+                }.orEmpty()
+
+                owner != null && repo != null -> createGitHubPurl(owner, repo, ref.orEmpty(), vcsInfo.path)
+
+                else -> ""
+            }
 
             Package(
-                id = dependency.toIdentifier(),
-                purl = "pkg:github/$slug$pathQualifier",
+                id = action.toIdentifier(),
+                purl = purl,
                 declaredLicenses = emptySet(),
                 description = "",
                 homepageUrl = vcsToHomepageUrl(vcsInfo.url),
@@ -70,25 +91,29 @@ internal class GitHubActionDependencyHandler(private val projectVcs: VcsInfo) : 
             )
         }
 
-    private val ABom.Action.slug: String
-        get() = if (type == ABom.ActionType.LOCAL) {
-            projectVcs.url.substringAfter("github.com/").removeSuffix(".git")
-        } else {
-            uses
-        }
+    /**
+     * The owner and the name of the project's repository, which contains local actions, or null if the project is not
+     * hosted on GitHub.
+     */
+    private val projectRepository: Pair<String, String>? by lazy {
+        val url = normalizeVcsUrl(projectVcs.url)
+        val owner = VcsHost.GITHUB.getUserOrOrganization(url)
+        val repo = VcsHost.GITHUB.getProject(url)
+
+        if (owner != null && repo != null) owner to repo else null
+    }
 
     private fun ABom.Action.toIdentifier(): Identifier {
-        // Include the path to the action in the name, as there can be multiple actions in the same repository. For
-        // Docker actions, the path is the image reference instead.
-        val normalizedPath = path?.takeUnless { type == ABom.ActionType.DOCKER }
-            ?.removePrefix("./")?.removeSuffix("/").orEmpty()
+        if (type == ABom.ActionType.DOCKER) return dockerImage.toIdentifier()
+
+        // Include the path to the action in the name, as there can be multiple actions in the same repository.
         val pathSuffix = normalizedPath.ensurePrefix("/")
 
         return if (type == ABom.ActionType.LOCAL) {
             Identifier(
                 type = PACKAGE_TYPE,
-                namespace = slug.substringBefore("/"),
-                name = slug.substringAfter("/") + pathSuffix,
+                namespace = projectRepository?.first.orEmpty(),
+                name = projectRepository?.second?.let { it + pathSuffix } ?: normalizedPath,
                 version = projectVcs.revision
             )
         } else {
@@ -102,5 +127,65 @@ internal class GitHubActionDependencyHandler(private val projectVcs: VcsInfo) : 
     }
 }
 
+/** The normalized path to the action within its repository, see [normalizeActionPath]. */
+private val ABom.Action.normalizedPath: String
+    get() = path?.let { normalizeActionPath(it) }.orEmpty()
+
+/** The Docker image used by an action of the form "docker://image". */
+private val ABom.Action.dockerImage: DockerImageReference
+    get() = DockerImageReference.parse(path ?: uses.removePrefix("docker://"))
+
+// Include the registry to distinguish images with the same name from different registries. Encode the colons of a
+// port or a digest, as colons separate the components of an identifier.
+private fun DockerImageReference.toIdentifier() =
+    Identifier(
+        type = DOCKER_PACKAGE_TYPE,
+        namespace = listOf(registry, namespace).filter { it.isNotEmpty() }.joinToString("/").encodeColons(),
+        name = name,
+        version = version.encodeColons()
+    )
+
+/** Encode colons in this string, as colons separate the components of an [Identifier]. */
+internal fun String.encodeColons() = replace(":", "%3A")
+
+private fun createDockerPackage(image: DockerImageReference) =
+    Package(
+        id = image.toIdentifier(),
+        purl = image.toPurl(),
+        declaredLicenses = emptySet(),
+        description = "",
+        homepageUrl = "",
+        binaryArtifact = RemoteArtifact.EMPTY,
+        sourceArtifact = RemoteArtifact.EMPTY,
+        vcs = VcsInfo.EMPTY
+    )
+
+/**
+ * Create a purl of type "docker" for this image. According to the purl specification, the registry is specified as the
+ * "repository_url" qualifier.
+ */
+private fun DockerImageReference.toPurl(): String =
+    PackageURLBuilder.aPackageURL()
+        .withType(PackageURL.StandardTypes.DOCKER)
+        .withNamespace(namespace.ifEmpty { null })
+        .withName(name)
+        .withVersion(version)
+        .apply { if (registry.isNotEmpty()) withQualifier("repository_url", registry) }
+        .build()
+        .canonicalize()
+
 internal fun vcsToHomepageUrl(vcsUrl: String) =
     normalizeVcsUrl(vcsUrl).removeSuffix(".git").replace("ssh://git@", "https://")
+
+/**
+ * Create a purl of type "github" for the action in the [subpath] of the repository [owner]/[repo] in the given
+ * [version], or an empty string if the [subpath] is outside the repository.
+ */
+private fun createGitHubPurl(owner: String, repo: String, version: String, subpath: String) =
+    if (File(subpath).startsWith("..")) "" else Identifier("github", owner, repo, version).toPurl(subpath = subpath)
+
+/**
+ * Normalize the [path] to an action within a repository, as purl subpaths must not contain "." or ".." segments. The
+ * result is empty for the root of the repository, and starts with ".." if the path is outside the repository.
+ */
+internal fun normalizeActionPath(path: String) = File(path).normalize().invariantSeparatorsPath

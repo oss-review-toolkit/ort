@@ -480,6 +480,10 @@ class VcsHostTest : WordSpec({
         "handle an unknown URL" {
             VcsHost.fromUrl("https://host.tld/path/to/repo") should beNull()
         }
+
+        "not match hosts that only end with the name of a known host" {
+            VcsHost.fromUrl("https://notgithub.com/oss-review-toolkit/ort") should beNull()
+        }
     }
 
     "Getting the project from a URL" should {
@@ -517,6 +521,10 @@ class VcsHostTest : WordSpec({
 
         "handle an unknown URL" {
             VcsHost.fromUrl("https://host.tld/path/to/repo") should beNull()
+        }
+
+        "not match hosts that only end with the name of a known host" {
+            VcsHost.fromUrl("https://notgithub.com/oss-review-toolkit/ort") should beNull()
         }
     }
 })

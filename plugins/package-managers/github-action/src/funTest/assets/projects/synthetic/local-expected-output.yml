@@ -79,7 +79,7 @@ packages:
   source_code_origins:
   - "VCS"
 - id: "GitHubAction:oss-review-toolkit:ort/.github/actions/free-disk-space:<REPLACE_VCS_REVISION>"
-  purl: "pkg:github/oss-review-toolkit/ort#.github/actions/free-disk-space"
+  purl: "pkg:github/oss-review-toolkit/ort@<REPLACE_VCS_REVISION>#.github/actions/free-disk-space"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""

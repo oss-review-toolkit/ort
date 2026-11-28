@@ -1,0 +1,3 @@
+title: Not an action
+steps:
+  - uses: actions/checkout@v4
