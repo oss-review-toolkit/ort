@@ -145,7 +145,8 @@ private fun DockerImageReference.toIdentifier() =
         version = version.encodeColons()
     )
 
-private fun String.encodeColons() = replace(":", "%3A")
+/** Encode colons in this string, as colons separate the components of an [Identifier]. */
+internal fun String.encodeColons() = replace(":", "%3A")
 
 private fun createDockerPackage(image: DockerImageReference) =
     Package(

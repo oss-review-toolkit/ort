@@ -127,7 +127,7 @@ class GitHubAction(
         // Map workflows to projects.
         val workflowBaseName = File(workflow.path).nameWithoutExtension
         val projectName = workflow.name.ifEmpty { workflowBaseName }
-        val projectId = Identifier(PROJECT_TYPE, workflowBaseName, projectName, "")
+        val projectId = Identifier(PROJECT_TYPE, workflowBaseName.encodeColons(), projectName.encodeColons(), "")
 
         // Map jobs to scopes.
         workflow.jobs.forEach { job ->

@@ -21,9 +21,12 @@ package org.ossreviewtoolkit.plugins.packagemanagers.githubaction
 
 import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
@@ -73,5 +76,14 @@ class GitHubActionFunTest : StringSpec({
         val result = GitHubActionFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
+    "colons in workflow names are encoded" {
+        val definitionFile = getAssetFile("projects/synthetic/ort-like/.github/workflows/colon.yml")
+
+        val result = GitHubActionFactory.create().resolveSingleProject(definitionFile)
+
+        result.issues should beEmpty()
+        result.project.id shouldBe Identifier("GitHubAction", "colon", "CI%3A Colon", "")
     }
 })
