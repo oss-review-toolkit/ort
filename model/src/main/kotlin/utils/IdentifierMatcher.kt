@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.model.utils
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.utils.common.equalsOrIsBlank
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /** Return true if the version of this [org.ossreviewtoolkit.model.Identifier] is an Ivy version range. */
@@ -46,20 +45,11 @@ private fun Identifier.isApplicableIvyVersion(pkgId: Identifier): Boolean =
 
 /**
  * Return true if this [Identifier] is matched by the given [matcher]. The [matcher]s version may be an
- * [Ivy version matcher](http://ant.apache.org/ivy/history/2.4.0/settings/version-matchers.html).
+ * [Ivy version matcher](http://ant.apache.org/ivy/history/2.4.0/settings/version-matchers.html). If [blankNameMatchAny]
+ * is true, a blank [matcher.name] matches any [name].
  */
-internal fun Identifier.isMatchedBy(matcher: Identifier): Boolean =
-    matchesDisregardingVersion(matcher) && isVersionMatchedBy(matcher)
-
-/**
- * Return true if this [Identifier] is matched by the [matcher]'s version. The [matcher]s version may be an
- * [Ivy version matcher](http://ant.apache.org/ivy/history/2.4.0/settings/version-matchers.html).
- */
-internal fun Identifier.isVersionMatchedBy(matcher: Identifier): Boolean =
-    matcher.version.equalsOrIsBlank(version) || matcher.isApplicableIvyVersion(this)
-
-/** Return true if this [Identifier] matches the given [other] identifier, disregarding the version. */
-private fun Identifier.matchesDisregardingVersion(other: Identifier) =
-    type.equals(other.type, ignoreCase = true)
-        && namespace == other.namespace
-        && name.equalsOrIsBlank(other.name)
+internal fun Identifier.isMatchedBy(matcher: Identifier, blankNameMatchAny: Boolean = true): Boolean =
+    type.equals(matcher.type, ignoreCase = true)
+        && namespace == matcher.namespace
+        && ((blankNameMatchAny && matcher.name.isBlank()) || name == matcher.name)
+        && (matcher.version.isBlank() || matcher.isApplicableIvyVersion(this))

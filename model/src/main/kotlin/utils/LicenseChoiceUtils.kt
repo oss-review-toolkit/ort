@@ -56,7 +56,11 @@ fun LicenseChoices.filterApplicable(
             licenseInfoResolver,
             filterLicenseViews
         ),
-        packageLicenseChoices = packageLicenseChoices.filter { it.packageId in packageIds }
+        packageLicenseChoices = packageLicenseChoices.filter { choice ->
+            packageIds.any { id ->
+                choice.isApplicable(id)
+            }
+        }
     )
 }
 

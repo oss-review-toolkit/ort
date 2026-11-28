@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.utils.isMatchedBy
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.spdxexpression.SpdxLicenseChoice
 
@@ -64,10 +65,24 @@ data class LicenseChoices(
 
 /** [SpdxLicenseChoice]s defined for an artifact. */
 data class PackageLicenseChoice(
+    /**
+     * The [Identifier] which must match with the identifier of the package in order for this package license choices
+     * to apply.
+     *
+     * The [version][Identifier.version] can be either:
+     * - blank, to match any version,
+     * - a plain version string matched for equality,
+     * - an [Ivy-style version matcher](https://ant.apache.org/ivy/history/2.6.0/settings/version-matchers.html).
+     *
+     * The other components of the [identifier][id] are matched by equality.
+     */
     val packageId: Identifier,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val licenseChoices: List<SpdxLicenseChoice> = emptyList()
-)
+) {
+    /** Return true if this package license choices is applicable to the given [package id][id]. */
+    fun isApplicable(id: Identifier) = id.isMatchedBy(packageId, blankNameMatchAny = false)
+}
 
 fun LicenseChoices?.orEmpty() = this ?: LicenseChoices()
 

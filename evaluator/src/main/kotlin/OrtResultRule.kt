@@ -83,16 +83,24 @@ open class OrtResultRule(
         buildMap<Identifier, MutableSet<SpdxLicenseChoice>> {
             val existingIds = ortResult.getIdentifiers()
 
-            ortResult.repository.config.licenseChoices.packageLicenseChoices.forEach { (id, choices) ->
-                if (id !in existingIds) {
-                    getOrPut(id) { mutableSetOf() } += choices
+            ortResult.repository.config.licenseChoices.packageLicenseChoices.forEach { packageLicenseChoice ->
+                val choices = packageLicenseChoice.licenseChoices
+
+                val matchingIds = existingIds.filterTo(mutableSetOf()) { id ->
+                    packageLicenseChoice.isApplicable(id)
+                }
+
+                if (matchingIds.isEmpty()) {
+                    getOrPut(packageLicenseChoice.packageId) { mutableSetOf() } += choices
                     return@forEach
                 }
 
-                val appliedChoices = ruleSet.licenseInfoResolver.resolveLicenseInfo(id).filterExcluded()
-                    .effectiveLicenseAndAppliedChoices(licenseView, choices).second.toSet()
+                val appliedChoices = matchingIds.flatMapTo(mutableSetOf()) { id ->
+                    ruleSet.licenseInfoResolver.resolveLicenseInfo(id).filterExcluded()
+                        .effectiveLicenseAndAppliedChoices(licenseView, choices).second.toSet()
+                }
 
-                getOrPut(id) { mutableSetOf() } += choices.toSet() - appliedChoices
+                getOrPut(packageLicenseChoice.packageId) { mutableSetOf() } += choices.toSet() - appliedChoices
             }
         }
 
