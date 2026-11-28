@@ -438,8 +438,8 @@ enum class VcsHost(
 
     private val supportedTypes = supportedTypes.asList()
 
-    /** Return whether this host is applicable for the [url] URI. */
-    open fun isApplicable(url: URI) = url.host?.endsWith(hostname) == true
+    /** Return whether this host is applicable for the [url] URI, i.e. its host is [hostname] or a subdomain of it. */
+    open fun isApplicable(url: URI) = url.host?.let { it == hostname || it.endsWith(".$hostname") } == true
 
     /** Return whether this host is applicable for the [url] string. */
     fun isApplicable(url: String) = url.toUri { isApplicable(it) }.getOrDefault(false)
