@@ -94,6 +94,60 @@ class GitHubActionDependencyHandlerTest : WordSpec({
             )
         }
 
+        "create purls with the repository as the name and the path to the action as the subpath" {
+            val packages = resolvePackages(
+                standardAction("actions", "checkout", "v6"),
+                subdirectoryAction("github", "codeql-action", "init", "v4"),
+                localAction("./"),
+                localAction("./.github/actions/free-disk-space")
+            )
+
+            packages.map { it.purl } should containExactlyInAnyOrder(
+                "pkg:github/actions/checkout@v6",
+                "pkg:github/github/codeql-action@v4#init",
+                "pkg:github/oss-review-toolkit/ort@${projectVcs.revision}",
+                "pkg:github/oss-review-toolkit/ort@${projectVcs.revision}#.github/actions/free-disk-space"
+            )
+        }
+
+        "create purls with encoded versions" {
+            val packages = resolvePackages(standardAction("actions", "checkout", "releases/v6"))
+
+            packages.map { it.purl } should containExactlyInAnyOrder("pkg:github/actions/checkout@releases%2Fv6")
+        }
+
+        "create purls with a lowercase owner and repository" {
+            val packages = resolvePackages(subdirectoryAction("SonarSource", "SonarQube-Scan-Action", "Install", "V5"))
+
+            packages.map { it.purl } should containExactly("pkg:github/sonarsource/sonarqube-scan-action@V5#Install")
+        }
+
+        "normalize the paths to local actions" {
+            val packages = resolvePackages(
+                localAction("./.github/actions/../../shared/"),
+                localAction("./shared"),
+                localAction("./.github/actions/..")
+            )
+
+            packages.map { it.id } should containExactlyInAnyOrder(
+                Identifier("GitHubAction", "oss-review-toolkit", "ort/shared", projectVcs.revision),
+                Identifier("GitHubAction", "oss-review-toolkit", "ort/.github", projectVcs.revision)
+            )
+
+            packages.map { it.purl } should containExactlyInAnyOrder(
+                "pkg:github/oss-review-toolkit/ort@${projectVcs.revision}#shared",
+                "pkg:github/oss-review-toolkit/ort@${projectVcs.revision}#.github"
+            )
+
+            packages.map { it.vcs.path } should containExactlyInAnyOrder("shared", ".github")
+        }
+
+        "create no purl for local actions outside the repository" {
+            val packages = resolvePackages(localAction("../other/action"))
+
+            packages.map { it.purl } should containExactly("")
+        }
+
         "create packages for local actions if the project has no VCS information" {
             val packages = resolvePackages(
                 localAction("./"),

@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.githubaction
 
+import java.io.File
+
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
@@ -29,6 +31,7 @@ import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.DependencyHandler
+import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.ensurePrefix
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
@@ -41,7 +44,7 @@ internal class GitHubActionDependencyHandler(private val projectVcs: VcsInfo) : 
 
     override fun createPackage(dependency: ABom.Action, issues: MutableCollection<Issue>) =
         with(dependency) {
-            val normalizedPath = path?.removePrefix("./").orEmpty()
+            val normalizedPath = path?.let { normalizeActionPath(it) }.orEmpty()
 
             val vcsInfo = if (type == ABom.ActionType.LOCAL) {
                 projectVcs.copy(path = normalizedPath)
@@ -56,18 +59,21 @@ internal class GitHubActionDependencyHandler(private val projectVcs: VcsInfo) : 
                 )
             }
 
-            val pathQualifier = if (vcsInfo.path.isNotEmpty()) "#${vcsInfo.path}" else vcsInfo.path
+            val purl = when {
+                // Without a repository on GitHub, there is no "github" purl for local actions.
+                type == ABom.ActionType.LOCAL -> projectRepository?.let { (owner, repo) ->
+                    createGitHubPurl(owner, repo, projectVcs.revision, vcsInfo.path)
+                }.orEmpty()
 
-            // Without a repository on GitHub, there is no "github" purl for local actions.
-            val slug = if (type == ABom.ActionType.LOCAL) {
-                projectRepository?.let { (owner, repo) -> "$owner/$repo" }
-            } else {
-                uses
+                owner != null && repo != null -> createGitHubPurl(owner, repo, ref.orEmpty(), vcsInfo.path)
+
+                // Actions without an owner and a repository, like Docker actions, are not hosted on GitHub.
+                else -> "pkg:github/$uses"
             }
 
             Package(
                 id = dependency.toIdentifier(),
-                purl = slug?.let { "pkg:github/$it$pathQualifier" }.orEmpty(),
+                purl = purl,
                 declaredLicenses = emptySet(),
                 description = "",
                 homepageUrl = vcsToHomepageUrl(vcsInfo.url),
@@ -94,7 +100,7 @@ internal class GitHubActionDependencyHandler(private val projectVcs: VcsInfo) : 
         // Include the path to the action in the name, as there can be multiple actions in the same repository. For
         // Docker actions, the path is the image reference instead.
         val normalizedPath = path?.takeUnless { type == ABom.ActionType.DOCKER }
-            ?.removePrefix("./")?.removeSuffix("/").orEmpty()
+            ?.let { normalizeActionPath(it) }.orEmpty()
         val pathSuffix = normalizedPath.ensurePrefix("/")
 
         return if (type == ABom.ActionType.LOCAL) {
@@ -117,3 +123,16 @@ internal class GitHubActionDependencyHandler(private val projectVcs: VcsInfo) : 
 
 internal fun vcsToHomepageUrl(vcsUrl: String) =
     normalizeVcsUrl(vcsUrl).removeSuffix(".git").replace("ssh://git@", "https://")
+
+/**
+ * Create a purl of type "github" for the action in the [subpath] of the repository [owner]/[repo] in the given
+ * [version], or an empty string if the [subpath] is outside the repository.
+ */
+private fun createGitHubPurl(owner: String, repo: String, version: String, subpath: String) =
+    if (File(subpath).startsWith("..")) "" else Identifier("github", owner, repo, version).toPurl(subpath = subpath)
+
+/**
+ * Normalize the [path] to an action within a repository, as purl subpaths must not contain "." or ".." segments. The
+ * result is empty for the root of the repository, and starts with ".." if the path is outside the repository.
+ */
+internal fun normalizeActionPath(path: String) = File(path).normalize().invariantSeparatorsPath
