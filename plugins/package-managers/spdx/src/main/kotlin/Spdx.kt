@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.spdx
 
 import java.io.File
 
+import kotlin.jvm.optionals.getOrDefault
 import kotlin.jvm.optionals.getOrNull
 
 import org.apache.commons.compress.compressors.zstandard.ZstdCompressorInputStream
@@ -28,45 +29,39 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
+import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.Hash
-import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
-import org.ossreviewtoolkit.model.RemoteArtifact
-import org.ossreviewtoolkit.model.Scope
-import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Includes
-import org.ossreviewtoolkit.model.orNone
-import org.ossreviewtoolkit.model.utils.toIdentifier
-import org.ossreviewtoolkit.model.utils.toPackageUrl
-import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
-import org.ossreviewtoolkit.utils.common.enumSetOf
-import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.spdxexpression.toExpression
-import org.ossreviewtoolkit.utils.spdxexpression.toSpdxOrNull
 
 import org.spdx.library.SpdxModelFactory
-import org.spdx.library.model.v3_0_1.core.Element
-import org.spdx.library.model.v3_0_1.core.ExternalIdentifierType
-import org.spdx.library.model.v3_0_1.core.Hash as SpdxHash
+import org.spdx.library.model.v3_0_1.build.Build
+import org.spdx.library.model.v3_0_1.core.LifecycleScopeType
 import org.spdx.library.model.v3_0_1.core.Relationship
 import org.spdx.library.model.v3_0_1.core.RelationshipType
 import org.spdx.library.model.v3_0_1.core.SpdxDocument
-import org.spdx.library.model.v3_0_1.simplelicensing.LicenseExpression
+import org.spdx.library.model.v3_0_1.software.Sbom
 import org.spdx.library.model.v3_0_1.software.SpdxPackage as SpdxPackage
 import org.spdx.storage.simple.InMemSpdxStore
 import org.spdx.v3jsonldstore.JsonLDStore
 
 private const val PROJECT_TYPE = "SPDX"
-private const val PACKAGE_TYPE_SPDX = "SPDX"
+internal const val PACKAGE_TYPE_SPDX = "SPDX"
+
+// The lifecycle scopes other than for runtime and build, which need special handling.
+private val OTHER_LIFECYCLE_SCOPES = listOf(
+    LifecycleScopeType.DESIGN,
+    LifecycleScopeType.DEVELOPMENT,
+    LifecycleScopeType.TEST,
+    LifecycleScopeType.OTHER
+)
 
 @OrtPlugin(
     displayName = "SPDX",
@@ -77,6 +72,9 @@ class Spdx(override val descriptor: PluginDescriptor = SpdxFactory.descriptor) :
     init {
         SpdxModelFactory.init()
     }
+
+    private val dependencyHandler = SpdxDependencyHandler()
+    private val graphBuilder = DependencyGraphBuilder(dependencyHandler)
 
     override val globsForDefinitionFiles = listOf(
         "*.spdx.json", "*.spdx.jsonld",
@@ -92,175 +90,238 @@ class Spdx(override val descriptor: PluginDescriptor = SpdxFactory.descriptor) :
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val spdxDocument = parseSpdx3File(definitionFile)
+        val relationships = mutableListOf<Relationship>()
+        val packages = mutableListOf<SpdxPackage>()
+
+        // Only iterate over elements once to get all needed instance types.
+        val counts = sortedMapOf<String, Int>()
+        spdxDocument.elements.forEach { element ->
+            counts.compute(element.type) { _, v -> v?.let { it + 1 } ?: 1 }
+
+            when (element) {
+                is Relationship -> relationships += element
+                is SpdxPackage -> packages += element
+            }
+        }
 
         logger.debug {
-            val counts = spdxDocument.elements.groupingBy { it.type }.eachCount().toSortedMap()
-
             counts.entries.joinToString("\n", prefix = "Found ${spdxDocument.elements.size} SPDX element(s):\n") {
                 "\t${it.key}: ${it.value}"
             }
         }
 
-        val spdxPackages = spdxDocument.elements.filterIsInstance<SpdxPackage>()
-        val relationships = spdxDocument.elements.filterIsInstance<Relationship>()
+        val context = SpdxDocumentContext(relationships, packages)
 
-        val packagesByScope = spdxPackages.groupBy { pkg ->
-            pkg.primaryPurpose.getOrNull()?.name?.lowercase() ?: "other"
-        }
+        // Prefer explicit DESCRIBES relationships over root elements, as the JSON-LD store turns all elements into root
+        // elements if a document does not specify any.
+        val documentDescribes = context.getElementsReferredFrom(spdxDocument, RelationshipType.DESCRIBES)
+            .ifEmpty { spdxDocument.rootElements }
 
-        val licenseMap = buildLicenseMap(relationships, spdxDocument.elements)
-        val ortPackages = mutableMapOf<Identifier, Package>()
-        val scopes = mutableSetOf<Scope>()
+        val fallbackProjectName = getFallbackProjectName(analysisRoot, definitionFile)
 
-        packagesByScope.forEach { (scopeName, packages) ->
-            val packageRefs = packages.mapNotNullTo(mutableSetOf()) { spdxPkg ->
-                val ortPackage = spdxPkg.toOrtPackage(licenseMap) ?: return@mapNotNullTo null
+        fun getProjectId(pkg: SpdxPackage, sbom: Sbom? = null): Identifier {
+            val projectName = pkg.name.getOrNull()
+                ?: sbom?.name?.getOrNull()
+                ?: spdxDocument.name.getOrNull()
+                ?: fallbackProjectName
 
-                ortPackages.merge(ortPackage.id, ortPackage) { existing, other ->
-                    // SPDX version 3 files generated by Yocto Linux often contain packages that only differ in the SPDX
-                    // ID, but not in other inline properties. As licenses are indirectly defined via relationships
-                    // based on the SPDX ID, ensure to merge these.
-                    existing.mergeLicenses(other)
-                }
-
-                PackageReference(ortPackage.id)
-            }
-
-            if (packageRefs.isNotEmpty()) {
-                scopes += Scope(name = scopeName, dependencies = packageRefs)
-            }
-        }
-
-        val projectName = spdxDocument.name.getOrNull() ?: spdxPackages.singleOrNull()?.name?.getOrNull()
-            ?: getFallbackProjectName(analysisRoot, definitionFile)
-
-        val project = Project(
-            id = Identifier(
+            return Identifier(
                 type = projectType,
                 namespace = "",
-                name = projectName,
-                version = ""
-            ),
-            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            authors = emptySet(),
-            declaredLicenses = emptySet(),
-            // Do not derive the (processed) VCS information from the working directory as done for several other
-            // package managers, including SpdxDocumentFile, because the location of the SPDX file usually does not
-            // match the location of the project it describes.
-            vcs = VcsInfo.EMPTY,
-            homepageUrl = "",
-            scopeDependencies = scopes
-        )
-
-        logger.debug {
-            "Resolved ${ortPackages.size} packages in ${scopes.size} scopes: " +
-                scopes.joinToString(postfix = ".") { "${it.name} (${it.dependencies.size})" }
+                name = projectName.sanitize(),
+                version = pkg.packageVersion.getOrDefault("").sanitize()
+            )
         }
 
-        return listOf(ProjectAnalyzerResult(project, ortPackages.values.toSet()))
+        val projects = documentDescribes.flatMap { describedElement ->
+            when (describedElement) {
+                is Sbom -> {
+                    val describedRootPackages = describedElement.rootElements
+                        .filterIsInstanceTo(mutableSetOf<SpdxPackage>())
+
+                    val diff = describedElement.rootElements - describedRootPackages
+                    if (diff.isNotEmpty()) {
+                        logger.info {
+                            "The following root elements are not packages and will be discarded: " +
+                                diff.joinToString { "${it.name.getOrDefault("unnamed")} (${it.type})" }
+                        }
+                    }
+
+                    describedRootPackages.map { pkg -> pkg to getProjectId(pkg, describedElement) }
+                }
+
+                is SpdxPackage -> listOf(describedElement to getProjectId(describedElement))
+
+                else -> {
+                    logger.warn { "Unhandled root element type '${describedElement.type}'." }
+                    emptyList()
+                }
+            }
+        }.distinctBy { (pkg, _) ->
+            //  Remove duplicates in case the same package shows up more than once, for example as a document root
+            //  element and also through DESCRIBES.
+            pkg
+        }
+
+        val (projectPackage, projectId) = requireNotNull(projects.singleOrNull()) {
+            "Currently only a single project per SPDX document is supported."
+        }
+
+        // The project package may be the output of a build. Inputs of that build that are the output of other builds
+        // are the packages that get installed, like for the Yocto build that creates the image's root filesystem. All
+        // other inputs are the sources the project package is built from.
+        val projectBuilds = context.getElementsReferringTo(projectPackage, RelationshipType.HAS_OUTPUT)
+            .filterIsInstance<Build>()
+
+        val (installedPackages, sourcePackages) = projectBuilds
+            .flatMap { context.getElementsReferredFrom(it, RelationshipType.HAS_INPUT) }
+            .filterIsInstance<SpdxPackage>()
+            .distinct()
+            .partition { input ->
+                context.getElementsReferringTo(input, RelationshipType.HAS_OUTPUT).any { it is Build }
+            }
+
+        val runtimeDependencies = installedPackages.map { SpdxDependency(it, LifecycleScopeType.RUNTIME, context) } +
+            // The project package may also directly depend on the packages that get installed.
+            dependencyHandler.dependenciesFor(SpdxDependency(projectPackage, LifecycleScopeType.RUNTIME, context))
+
+        addDirectDependencies(projectId, LifecycleScopeType.RUNTIME, runtimeDependencies)
+
+        // Collect all packages that are reachable in the runtime scope, as any of them may be the output of a build
+        // whose input packages are the sources the package is built from. For Yocto, these are the builds of the
+        // recipes.
+        val runtimePackages = mutableSetOf<SpdxPackage>()
+        val queue = ArrayDeque(runtimeDependencies)
+        while (queue.isNotEmpty()) {
+            val dependency = queue.removeFirst()
+            if (runtimePackages.add(dependency.element)) queue += dependencyHandler.dependenciesFor(dependency)
+        }
+
+        val buildDependencies = runtimePackages
+            .flatMap { context.getElementsReferringTo(it, RelationshipType.HAS_OUTPUT) }
+            .filterIsInstance<Build>()
+            .flatMapTo(mutableSetOf()) { context.getBuildInputs(it) }
+
+        // The sources of the project package are needed at build time, and so are the build dependencies of the builds
+        // of the project package, like tools. If there are sources, the latter usually also are dependencies of the
+        // sources.
+        val projectBuildDependencies = sourcePackages.map { SpdxDependency(it, LifecycleScopeType.BUILD, context) } +
+            projectBuilds.flatMap { context.getBuildDependencies(it) }
+
+        // The project package and the packages it needs at runtime may also directly depend on packages at build time.
+        // Their own dependencies are what they need at runtime, so follow these instead of their build dependencies.
+        val directBuildDependencies = (runtimePackages + projectPackage)
+            .flatMap { context.getDependencies(it, LifecycleScopeType.BUILD) }
+            .filterIsInstance<SpdxPackage>()
+            .map { SpdxDependency(it, LifecycleScopeType.RUNTIME, context) }
+
+        addDirectDependencies(
+            projectId,
+            LifecycleScopeType.BUILD,
+            projectBuildDependencies + buildDependencies + directBuildDependencies
+        )
+
+        // Like for direct build dependencies, follow the runtime dependencies of packages the project package and the
+        // packages it needs at runtime depend on in any other lifecycle scope.
+        OTHER_LIFECYCLE_SCOPES.forEach { scope ->
+            val dependencies = (runtimePackages + projectPackage)
+                .flatMap { context.getDependencies(it, scope) }
+                .filterIsInstance<SpdxPackage>()
+                .map { SpdxDependency(it, LifecycleScopeType.RUNTIME, context) }
+
+            addDirectDependencies(projectId, scope, dependencies)
+        }
+
+        // As the project package is not returned as a package, take over its metadata to the project.
+        val projectMetadata = context.createPackage(projectPackage)
+
+        val project = Project(
+            id = projectId,
+            cpe = projectMetadata.cpe,
+            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            authors = emptySet(),
+            declaredLicenses = projectMetadata.declaredLicenses,
+            // Do not derive the (processed) VCS information from the working directory as done for several other
+            // package managers, including SpdxDocumentFile, because the location of the SPDX file usually does not
+            // match the location of the project it describes. Only use the VCS information from the project package.
+            vcs = projectMetadata.vcs,
+            description = projectMetadata.description,
+            homepageUrl = projectMetadata.homepageUrl,
+            scopeNames = graphBuilder.scopesFor(projectId)
+        )
+
+        return listOf(ProjectAnalyzerResult(project, packages = emptySet()))
     }
 
     /**
-     * Build a map keyed by object URI associated with a nested map of the license relationship type associated with the
-     * respective licenses.
+     * Add the entry points among the given [dependencies] as direct dependencies to the [scope] of the project with the
+     * given [projectId], see [getEntryPoints]. This is necessary as SPDX documents do not explicitly distinguish direct
+     * from transitive dependencies.
      */
-    private fun buildLicenseMap(
-        relationships: Collection<Relationship>,
-        elements: Collection<Element>
-    ): Map<String, Map<RelationshipType, Set<String>>> {
-        val licenseMap = mutableMapOf<String, MutableMap<RelationshipType, MutableSet<String>>>()
+    private fun addDirectDependencies(
+        projectId: Identifier,
+        scope: LifecycleScopeType,
+        dependencies: Collection<SpdxDependency>
+    ) {
+        val directDependencies = getEntryPoints(dependencies) { dependencyHandler.dependenciesFor(it) }
+        graphBuilder.addDependencies(projectId, scope.longName, directDependencies)
+    }
 
-        val licenseElements = elements.filterIsInstance<LicenseExpression>()
+    override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
+        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
+}
 
-        relationships.forEach { rel ->
-            val fromElement = rel.from ?: return@forEach
-            val fromId = fromElement.objectUri
+/**
+ * Return those of the given [nodes] from which all [nodes] can be reached via [dependenciesFor]. These are the nodes
+ * that are not a direct or transitive dependency of any other of the [nodes], plus one node per dependency cycle that
+ * is not reachable from any of these nodes, as all members of such a cycle are a dependency of another node. Nodes are
+ * returned in the order they are given.
+ */
+internal fun <T> getEntryPoints(nodes: Collection<T>, dependenciesFor: (T) -> Collection<T>): List<T> {
+    val candidates = nodes.toCollection(LinkedHashSet())
 
-            val toElements = rel.tos.ifEmpty { return@forEach }
-            val toIds = toElements.map { it.objectUri }
+    // Also follow dependencies that are not among the candidates, as these may lead to other candidates.
+    val dependedOn = mutableSetOf<T>()
+    val queue = ArrayDeque(candidates.flatMap { dependenciesFor(it) })
+    while (queue.isNotEmpty()) {
+        val node = queue.removeFirst()
+        if (dependedOn.add(node)) queue += dependenciesFor(node)
+    }
 
-            licenseElements.filter { it.objectUri in toIds }.mapNotNull { it.licenseExpression }.forEach { licenses ->
-                licenseMap.getOrPut(fromId) { mutableMapOf() }
-                    .getOrPut(checkNotNull(rel.relationshipType)) { mutableSetOf() } += licenses
+    val entryPoints = candidates.filter { it !in dependedOn }
+
+    // Everything that is reachable from a node that is reachable from an entry point is reachable from that entry
+    // point, too, so stop the traversal at such nodes.
+    fun getReachableNodes(start: T, reachable: Set<T>): Set<T> {
+        val visited = mutableSetOf(start)
+        val queue = ArrayDeque(listOf(start))
+
+        while (queue.isNotEmpty()) {
+            dependenciesFor(queue.removeFirst()).forEach { node ->
+                if (node !in reachable && visited.add(node)) queue += node
             }
         }
 
-        return licenseMap
+        return visited
     }
 
-    private fun SpdxPackage.toOrtPackage(licenseMap: Map<String, Map<RelationshipType, Set<String>>>): Package? {
-        val pkgName = name.getOrNull() ?: return null
-        val pkgVersion = packageVersion.getOrNull().orEmpty()
+    val reachable = mutableSetOf<T>()
+    entryPoints.forEach { reachable += getReachableNodes(it, reachable) }
 
-        val purl = externalIdentifiers.filter {
-            it.externalIdentifierType == ExternalIdentifierType.PACKAGE_URL
-        }.firstNotNullOfOrNull { it.identifier }
+    val cycleEntryPoints = mutableListOf<T>()
+    val reachableFromCycles = mutableSetOf<T>()
 
-        val cpe = externalIdentifiers.filter {
-            it.externalIdentifierType in enumSetOf(ExternalIdentifierType.CPE22, ExternalIdentifierType.CPE23)
-        }.firstNotNullOfOrNull { it.identifier }
+    candidates.forEach { node ->
+        if (node in reachable || node in reachableFromCycles) return@forEach
 
-        // Prefer a PURL as it might contain proper type and namespace information.
-        val ortId = purl?.toPackageUrl()?.toIdentifier() ?: Identifier(
-            type = PACKAGE_TYPE_SPDX,
-            namespace = "",
-            name = pkgName,
-            version = pkgVersion
-        )
-
-        val url = downloadLocation.getOrNull()
-        val sourceArtifact = if (!url.isNullOrBlank()) {
-            val hash = verifiedUsings.filterIsInstance<SpdxHash>().firstOrNull()?.let { spdxHash ->
-                val algorithm = spdxHash.algorithm
-                val value = spdxHash.hashValue
-                if (algorithm != null && value != null) {
-                    Hash(value, HashAlgorithm.fromString(algorithm.longName))
-                } else {
-                    Hash.NONE
-                }
-            }.orNone()
-
-            RemoteArtifact(url, hash)
-        } else {
-            RemoteArtifact.EMPTY
-        }
-
-        val pkgLicenses = licenseMap[objectUri]
-        val declaredLicenses = pkgLicenses?.get(RelationshipType.HAS_DECLARED_LICENSE).orEmpty()
-        val concludedLicenses = pkgLicenses?.get(RelationshipType.HAS_CONCLUDED_LICENSE).orEmpty()
-
-        val description = description.getOrNull() ?: summary.getOrNull()
-
-        return Package(
-            id = ortId,
-            purl = purl ?: ortId.toPurl(),
-            cpe = cpe,
-            authors = emptySet(),
-            declaredLicenses = declaredLicenses,
-            concludedLicense = if (concludedLicenses.size > 1) {
-                logger.warn { "Multiple concluded licenses found for ID $id, using their conjunction." }
-                concludedLicenses.mapNotNull { it.toSpdxOrNull() }.toExpression()
-            } else {
-                concludedLicenses.singleOrNull()?.toSpdxOrNull()
-            },
-            description = description.orEmpty(),
-            homepageUrl = homePage.getOrNull().orEmpty(),
-            binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = sourceArtifact,
-            vcs = VcsInfo.EMPTY
-        )
+        // Previously chosen entry points that are reachable from this node are redundant.
+        val reachableFromNode = getReachableNodes(node, reachable)
+        cycleEntryPoints.removeAll { it in reachableFromNode }
+        cycleEntryPoints += node
+        reachableFromCycles += reachableFromNode
     }
-}
 
-private fun Package.mergeLicenses(other: Package): Package {
-    val mergedDeclaredLicenses = declaredLicenses + other.declaredLicenses
-    val mergedConcludedLicense = setOfNotNull(concludedLicense, other.concludedLicense).toExpression()
-
-    return copy(
-        declaredLicenses = mergedDeclaredLicenses,
-        declaredLicensesProcessed = DeclaredLicenseProcessor.process(mergedDeclaredLicenses),
-        concludedLicense = mergedConcludedLicense
-    )
+    return entryPoints + cycleEntryPoints
 }
 
 private fun parseSpdx3File(spdxFile: File): SpdxDocument {
