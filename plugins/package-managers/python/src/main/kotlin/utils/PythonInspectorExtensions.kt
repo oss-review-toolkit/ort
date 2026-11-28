@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.getCommonParentFile
 
-private const val PACKAGE_TYPE = "PyPI"
+internal const val PACKAGE_TYPE = "PyPI"
 
 internal fun PythonInspector.Result.toOrtProject(
     projectType: String,
