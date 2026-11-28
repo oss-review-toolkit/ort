@@ -42,6 +42,7 @@ packages:
   - "Tatu Saloranta"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -75,6 +76,7 @@ packages:
   - "@API Guardian Team"
   declared_licenses:
   - "The Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -113,6 +115,7 @@ packages:
   - "Stefan Bechtold"
   declared_licenses:
   - "Eclipse Public License v2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "EPL-2.0"
     mapped:

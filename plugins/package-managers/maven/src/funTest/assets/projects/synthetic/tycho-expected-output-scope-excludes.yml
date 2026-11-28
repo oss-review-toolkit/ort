@@ -59,6 +59,7 @@ packages:
   - "The Apache Software Foundation"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "Apache Commons Logging is a thin adapter allowing configurable bridging\
@@ -103,6 +104,7 @@ packages:
   - "upstate.com"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "Tools to assist in the reading of configuration/preferences files\
@@ -150,6 +152,7 @@ packages:
   - "The Apache Software Foundation"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "Apache Commons Lang, a package of Java utility classes for the\n \
@@ -186,6 +189,7 @@ packages:
   - "The Apache Software Foundation"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "Apache Commons Text is a set of utility functions and reusable components\

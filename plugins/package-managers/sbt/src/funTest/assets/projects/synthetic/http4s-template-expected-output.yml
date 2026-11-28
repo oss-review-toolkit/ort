@@ -91,6 +91,7 @@ packages:
   declared_licenses:
   - "Eclipse Public License - v 1.0"
   - "GNU Lesser General Public License"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "EPL-1.0 OR LGPL-2.1-or-later"
     mapped:
@@ -127,6 +128,7 @@ packages:
   declared_licenses:
   - "Eclipse Public License - v 1.0"
   - "GNU Lesser General Public License"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "EPL-1.0 OR LGPL-2.1-or-later"
     mapped:
@@ -170,6 +172,7 @@ packages:
   - "Rúnar Ó. Bjarnason"
   declared_licenses:
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "fs2-core"
@@ -210,6 +213,7 @@ packages:
   - "Rúnar Ó. Bjarnason"
   declared_licenses:
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "fs2-io"
@@ -241,6 +245,7 @@ packages:
   - "com.chuusai"
   declared_licenses:
   - "Apache 2"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -274,6 +279,7 @@ packages:
   - "Jeff Pinner"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -307,6 +313,7 @@ packages:
   - "io.chrisdavenport"
   declared_licenses:
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "unique"
@@ -338,6 +345,7 @@ packages:
   - "io.chrisdavenport"
   declared_licenses:
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "vault"
@@ -369,6 +377,7 @@ packages:
   - "io.circe"
   declared_licenses:
   - "Apache 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -402,6 +411,7 @@ packages:
   - "io.circe"
   declared_licenses:
   - "Apache 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -435,6 +445,7 @@ packages:
   - "io.circe"
   declared_licenses:
   - "Apache 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -468,6 +479,7 @@ packages:
   - "io.circe"
   declared_licenses:
   - "Apache 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -504,6 +516,7 @@ packages:
   - "Stefan Birkner"
   declared_licenses:
   - "Eclipse Public License 1.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "EPL-1.0"
     mapped:
@@ -544,6 +557,7 @@ packages:
   declared_licenses:
   - "Apache Software License - Version 2.0"
   - "Eclipse Public License - Version 1.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR EPL-1.0"
     mapped:
@@ -581,6 +595,7 @@ packages:
   - "Tom Denley"
   declared_licenses:
   - "New BSD License"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
@@ -618,6 +633,7 @@ packages:
   - "http4s.org"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "NIO Framework for Scala"
@@ -651,6 +667,7 @@ packages:
   - "http4s.org"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "NIO Framework for Scala"
@@ -700,6 +717,7 @@ packages:
   - "http4s.org"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "blaze implementation for http4s clients"
@@ -749,6 +767,7 @@ packages:
   - "http4s.org"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "Base library for binding blaze to http4s clients and servers"
@@ -798,6 +817,7 @@ packages:
   - "http4s.org"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "blaze implementation for http4s servers"
@@ -847,6 +867,7 @@ packages:
   - "http4s.org"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "Provides Circe codecs for http4s"
@@ -896,6 +917,7 @@ packages:
   - "http4s.org"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "Base library for building http4s clients"
@@ -945,6 +967,7 @@ packages:
   - "http4s.org"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "Core http4s library for servers and clients"
@@ -994,6 +1017,7 @@ packages:
   - "http4s.org"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "Simple DSL for writing http4s services"
@@ -1043,6 +1067,7 @@ packages:
   - "http4s.org"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "Base library to parse JSON to various ASTs for http4s"
@@ -1092,6 +1117,7 @@ packages:
   - "http4s.org"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "Base library for building http4s servers"
@@ -1124,6 +1150,7 @@ packages:
   - "org.http4s"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "jawn-fs2"
@@ -1156,6 +1183,7 @@ packages:
   - "org.http4s"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "Fork of parboiled2 for http4s, sans shapeless dependency"
@@ -1188,6 +1216,7 @@ packages:
   - "Sarah Gerweck"
   declared_licenses:
   - "Apache License, Version 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -1221,6 +1250,7 @@ packages:
   - "Lightbend, Inc."
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "Standard library for the Scala Programming Language"
@@ -1252,6 +1282,7 @@ packages:
   - "Lightbend, Inc."
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "Compiler for the Scala Programming Language"
@@ -1286,6 +1317,7 @@ packages:
   - "org.scala-sbt"
   declared_licenses:
   - "BSD"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
@@ -1320,6 +1352,7 @@ packages:
   - "Ólafur Páll Geirsson"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "A Java implementation of sbt's test interface for JUnit 4"
@@ -1351,6 +1384,7 @@ packages:
   - "Ólafur Páll Geirsson"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "munit"
@@ -1382,6 +1416,7 @@ packages:
   - "Ólafur Páll Geirsson"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "subs"
@@ -1414,6 +1449,7 @@ packages:
   - "Scodec"
   declared_licenses:
   - "BSD-3-Clause"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
   description: "scodec-bits"
@@ -1445,6 +1481,7 @@ packages:
   - "QOS.ch"
   declared_licenses:
   - "MIT License"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "MIT"
     mapped:
@@ -1492,6 +1529,7 @@ packages:
   - "org.typelevel"
   declared_licenses:
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Cats core"
@@ -1526,6 +1564,7 @@ packages:
   - "Typelevel"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "cats-effect"
@@ -1571,6 +1610,7 @@ packages:
   - "org.typelevel"
   declared_licenses:
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Cats kernel"
@@ -1602,6 +1642,7 @@ packages:
   - "org.typelevel"
   declared_licenses:
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "parser"
@@ -1633,6 +1674,7 @@ packages:
   - "Typelevel"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "munit-cats-effect-2"
@@ -1664,6 +1706,7 @@ packages:
   - "org.typelevel"
   declared_licenses:
   - "Apache 2.0"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:

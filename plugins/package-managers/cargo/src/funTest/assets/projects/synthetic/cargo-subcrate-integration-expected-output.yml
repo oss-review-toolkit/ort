@@ -30,6 +30,7 @@ packages:
   - "Mathijs van de Nes"
   declared_licenses:
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Synchronization primitives based on spinning.\nThey may contain data,\n\

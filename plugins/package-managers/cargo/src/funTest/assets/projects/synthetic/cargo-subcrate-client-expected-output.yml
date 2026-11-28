@@ -33,6 +33,7 @@ packages:
   declared_licenses:
   - "Apache-2.0"
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "A macro to ergonomically define an item depending on a large number\
@@ -64,6 +65,7 @@ packages:
   declared_licenses:
   - "Apache-2.0"
   - "MIT"
+  declared_licenses_operator: "OR"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: ""
