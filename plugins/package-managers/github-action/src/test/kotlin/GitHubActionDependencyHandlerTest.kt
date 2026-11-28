@@ -20,6 +20,8 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.githubaction
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAll
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 
@@ -37,8 +39,8 @@ class GitHubActionDependencyHandlerTest : WordSpec({
 
     val projectId = Identifier("GitHubAction:workflow:workflow:")
 
-    fun resolvePackages(vararg actions: ABom.Action) =
-        DependencyGraphBuilder(GitHubActionDependencyHandler(projectVcs)).run {
+    fun resolvePackages(vararg actions: ABom.Action, vcs: VcsInfo = projectVcs) =
+        DependencyGraphBuilder(GitHubActionDependencyHandler(vcs)).run {
             addDependencies(projectId, "job", actions.toList())
             packages()
         }
@@ -90,6 +92,57 @@ class GitHubActionDependencyHandlerTest : WordSpec({
                 ".github/actions/free-disk-space",
                 ".github/actions/setup-java"
             )
+        }
+
+        "create packages for local actions if the project has no VCS information" {
+            val packages = resolvePackages(
+                localAction("./"),
+                localAction("./.github/actions/free-disk-space"),
+                vcs = VcsInfo.EMPTY
+            )
+
+            packages.map { it.id } should containExactlyInAnyOrder(
+                Identifier("GitHubAction", "", "", ""),
+                Identifier("GitHubAction", "", ".github/actions/free-disk-space", "")
+            )
+
+            packages.map { it.purl } should containExactlyInAnyOrder("", "")
+        }
+
+        "create packages for local actions if the project is not hosted on GitHub" {
+            val gitLabVcs = projectVcs.copy(url = "https://gitlab.com/oss-review-toolkit/ort.git")
+
+            val packages = resolvePackages(localAction("./.github/actions/free-disk-space"), vcs = gitLabVcs)
+
+            packages.map { it.id } should containExactlyInAnyOrder(
+                Identifier("GitHubAction", "", ".github/actions/free-disk-space", projectVcs.revision)
+            )
+
+            packages.map { it.purl } should containExactlyInAnyOrder("")
+        }
+
+        "not treat projects as hosted on GitHub if only part of the URL matches" {
+            listOf(
+                "https://notgithub.com/oss-review-toolkit/ort.git",
+                "https://gitlab.example/mirrors/github.com/oss-review-toolkit/ort.git"
+            ).forAll { url ->
+                val packages = resolvePackages(localAction("./"), vcs = projectVcs.copy(url = url))
+
+                packages.map { it.id.namespace to it.purl } should containExactly("" to "")
+            }
+        }
+
+        "get the repository of local actions from SCP-like and SSH URLs" {
+            listOf(
+                "git@github.com:oss-review-toolkit/ort.git",
+                "ssh://git@github.com/oss-review-toolkit/ort.git"
+            ).forAll { url ->
+                val packages = resolvePackages(localAction("./"), vcs = projectVcs.copy(url = url))
+
+                packages.map { it.id } should containExactly(
+                    Identifier("GitHubAction", "oss-review-toolkit", "ort", projectVcs.revision)
+                )
+            }
         }
     }
 })

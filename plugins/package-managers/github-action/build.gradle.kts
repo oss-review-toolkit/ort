@@ -29,6 +29,7 @@ dependencies {
     api(projects.analyzer)
     api(projects.model)
 
+    implementation(projects.downloader)
     implementation(projects.utils.commonUtils)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)

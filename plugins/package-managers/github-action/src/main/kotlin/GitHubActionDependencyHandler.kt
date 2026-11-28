@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.githubaction
 
+import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
@@ -57,9 +58,16 @@ internal class GitHubActionDependencyHandler(private val projectVcs: VcsInfo) : 
 
             val pathQualifier = if (vcsInfo.path.isNotEmpty()) "#${vcsInfo.path}" else vcsInfo.path
 
+            // Without a repository on GitHub, there is no "github" purl for local actions.
+            val slug = if (type == ABom.ActionType.LOCAL) {
+                projectRepository?.let { (owner, repo) -> "$owner/$repo" }
+            } else {
+                uses
+            }
+
             Package(
                 id = dependency.toIdentifier(),
-                purl = "pkg:github/$slug$pathQualifier",
+                purl = slug?.let { "pkg:github/$it$pathQualifier" }.orEmpty(),
                 declaredLicenses = emptySet(),
                 description = "",
                 homepageUrl = vcsToHomepageUrl(vcsInfo.url),
@@ -70,12 +78,17 @@ internal class GitHubActionDependencyHandler(private val projectVcs: VcsInfo) : 
             )
         }
 
-    private val ABom.Action.slug: String
-        get() = if (type == ABom.ActionType.LOCAL) {
-            projectVcs.url.substringAfter("github.com/").removeSuffix(".git")
-        } else {
-            uses
-        }
+    /**
+     * The owner and the name of the project's repository, which contains local actions, or null if the project is not
+     * hosted on GitHub.
+     */
+    private val projectRepository: Pair<String, String>? by lazy {
+        val url = normalizeVcsUrl(projectVcs.url)
+        val owner = VcsHost.GITHUB.getUserOrOrganization(url)
+        val repo = VcsHost.GITHUB.getProject(url)
+
+        if (owner != null && repo != null) owner to repo else null
+    }
 
     private fun ABom.Action.toIdentifier(): Identifier {
         // Include the path to the action in the name, as there can be multiple actions in the same repository. For
@@ -87,8 +100,8 @@ internal class GitHubActionDependencyHandler(private val projectVcs: VcsInfo) : 
         return if (type == ABom.ActionType.LOCAL) {
             Identifier(
                 type = PACKAGE_TYPE,
-                namespace = slug.substringBefore("/"),
-                name = slug.substringAfter("/") + pathSuffix,
+                namespace = projectRepository?.first.orEmpty(),
+                name = projectRepository?.second?.let { it + pathSuffix } ?: normalizedPath,
                 version = projectVcs.revision
             )
         } else {
