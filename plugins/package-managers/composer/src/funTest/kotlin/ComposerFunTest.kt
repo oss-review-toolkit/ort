@@ -93,7 +93,11 @@ class ComposerFunTest : StringSpec({
             project.id shouldBe Identifier("Composer:ort:composer-test-project:0.1.0")
             project.definitionFilePath shouldBe "plugins/package-managers/composer/src/funTest/assets/projects/" +
                 "synthetic/no-lockfile/composer.json"
-            packages.size should beInRange(30..40)
+
+            val platformScope = project.scopes.single { it.name == "platform" }
+            val platformIds = platformScope.dependencies.map { it.id }
+            packages.filterNot { it.id in platformIds }.size should beInRange(30..40)
+
             issues should beEmpty()
         }
     }
